@@ -9,15 +9,16 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="accounts")
+@Table(name = "accounts")
 public class Account {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	private Long id;
+
 	private String accountHolderName;
+
 	private Double balance;
-	
-	
+
 }

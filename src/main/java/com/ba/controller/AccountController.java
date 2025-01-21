@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ba.response.AccountResponse;
 import com.ba.service.AccountService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
@@ -27,7 +29,7 @@ public class AccountController {
 	private AccountService accountService;
 
 	@PostMapping
-	public ResponseEntity<AccountResponse> addAccount(@RequestBody AccountResponse accountResponse) {
+	public ResponseEntity<AccountResponse> addAccount(@RequestBody @Valid AccountResponse accountResponse) {
 		return new ResponseEntity<AccountResponse>(accountService.addAccount(accountResponse), HttpStatus.CREATED);
 	}
 
