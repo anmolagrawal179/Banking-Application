@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: Banking-Application
+  datasource:
+    url: jdbc:mysql://localhost:3306/banking_application
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+         include: "*"
+  endpoint:
+    shutdown:
+      access: unrestricted
+server:
+  servlet:
+     context-path: /api		

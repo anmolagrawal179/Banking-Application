@@ -11,8 +11,11 @@ import com.ba.entity.Account;
 import com.ba.exception.AccountNotFoundException;
 import com.ba.exception.InsufficientBalanceException;
 import com.ba.repository.AccountRepository;
+import com.ba.request.DepositRequest;
+import com.ba.request.WithdrawRequest;
 import com.ba.response.AccountResponse;
 import com.ba.service.AccountService;
+
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -49,12 +52,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public AccountResponse deposit(Long id, Double amount) {
+	public AccountResponse deposit(Long id, DepositRequest depositRequest) {
 
 		Account account = accountRepository.findById(id)
 				.orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + id));
 
-		account.setBalance(amount + account.getBalance());
+		account.setBalance(account.getBalance()+depositRequest.getAmount());
 
 		Account savedAccount = accountRepository.save(account);
 
@@ -62,15 +65,15 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public AccountResponse withdraw(Long id, Double amount) {
+	public AccountResponse withdraw(Long id, WithdrawRequest withdrawRequest) {
 
 		Account account = accountRepository.findById(id)
 				.orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + id));
 
-		if (account.getBalance() < amount) {
+		if (account.getBalance() < withdrawRequest.getAmount()) {
 			throw new InsufficientBalanceException("Insufficient funds");
 		}
-		account.setBalance(account.getBalance() - amount);
+		account.setBalance(account.getBalance() - withdrawRequest.getAmount());
 
 		Account savedAccount = accountRepository.save(account);
 

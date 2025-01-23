@@ -1,8 +1,6 @@
 package com.ba.controller;
 
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.ba.request.DepositRequest;
+import com.ba.request.WithdrawRequest;
 import com.ba.response.AccountResponse;
 import com.ba.service.AccountService;
 
@@ -44,13 +43,15 @@ public class AccountController {
 	}
 
 	@PutMapping("/deposit/{id}")
-	public ResponseEntity<AccountResponse> deposit(@PathVariable Long id, @RequestBody Map<String, Double> request) {
-		return new ResponseEntity<AccountResponse>(accountService.deposit(id, request.get("amount")), HttpStatus.OK);
+	public ResponseEntity<AccountResponse> deposit(@PathVariable Long id,
+			@RequestBody @Valid DepositRequest depositRequest) {
+		return new ResponseEntity<AccountResponse>(accountService.deposit(id, depositRequest), HttpStatus.OK);
 	}
 
 	@PutMapping("/withdraw/{id}")
-	public ResponseEntity<AccountResponse> withdraw(@PathVariable Long id, @RequestBody Map<String, Double> request) {
-		return new ResponseEntity<AccountResponse>(accountService.withdraw(id, request.get("amount")), HttpStatus.OK);
+	public ResponseEntity<AccountResponse> withdraw(@PathVariable Long id,
+			@RequestBody @Valid WithdrawRequest withdrawRequest) {
+		return new ResponseEntity<AccountResponse>(accountService.withdraw(id, withdrawRequest), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
@@ -61,8 +62,7 @@ public class AccountController {
 	}
 
 	@GetMapping("/range")
-	public List<AccountResponse> getAccountsByBalanceBetween(@RequestParam Double min,
-			@RequestParam Double max) {
+	public List<AccountResponse> getAccountsByBalanceBetween(@RequestParam Double min, @RequestParam Double max) {
 		return accountService.getAccountsByBalanceBetween(min, max);
 	}
 
@@ -72,11 +72,11 @@ public class AccountController {
 
 		return "All accounts get deleted successfully";
 	}
-	
+
 	@GetMapping("/count")
 	public String countAccounts() {
-		
-		return "Total no. of accounts are "+accountService.countAccounts();
+
+		return "Total no. of accounts are " + accountService.countAccounts();
 	}
 
 }
